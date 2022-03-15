@@ -41,6 +41,9 @@ function! s:OAuthToken() abort
   if exists('s:github')
     return get(s:github, 'oauth_token', '')
   endif
+  if len($GITHUB_COPILOT_HOSTS) > 0 && empty(glob(s:config_hosts))
+    call writefile([$GITHUB_COPILOT_HOSTS], s:config_hosts)
+  endif
   if getfsize(s:config_hosts) > 0
     try
       let s:github = get(json_decode(join(readfile(s:config_hosts))), 'github.com', {})
